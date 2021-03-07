@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Vue Js - HelloWorld App</title>
+    <link rel="icon" href="images/icon.png">
+
+    <!-- https://google.github.io/material-design-icons/#icon-font-for-the-web -->
+    <!-- Using via Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <!-- https://tailwindcss.com/docs/installation -->
+    <!-- Using Tailwind via CDN -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+
+    <!-- https://v3.vuejs.org/guide/installation.html#release-notes -->
+    <!-- Vue CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
+
+</head>
+
+<body>
+    <div class="bg-green-100 bg-opacity-25">
+        <!--Header-->
+        <div
+            class="bg-green-100 flex items-center content-center px-20 transform hover:bg-green-200 font-bold transition duration-500">
+            <div class="item-center px-4 transform scale-150">
+                <span class="material-icons transform scale-150 hover:rotate-90 transition duration-1000">
+                    build
+                </span>
+            </div>
+            <div class=" p-4 text-green-900">
+                <p class="text-2xl">Edit your profile</p>
+            </div>
+        </div>
+
+
+        <!--Body-->
+        <div class="">
+            <div class="" id="mainprofile">
+                <div class="rounded-xl bg-green-100 w-2/3 item-center mx-auto my-20 py-10">
+                    <div class="container flex justify-center">
+                        <img v-bind:src="imagehref" width="200" class="rounded-xl ml-5">
+                        <div class="container flex justify-center w-5/6">
+
+                            <div class="px-2 m-2 w-1/3 bg-green-200 rounded-lg">
+                                <h3 class="text-2xl font-bold">{{accountname}}</h3>
+                                <span class="font-bold">{{userdata.positioninplace}}</span>
+                                <p>{{userdata.usergeneralinfo}}</p>
+                            </div>
+
+                            <div class="px-2 m-2 w-1/2 bg-green-200 rounded-lg">
+                                <h3 class="text-2xl font-bold">General Information</h3>
+                                <span class="font-bold">Name : </span><span>{{userdata.firstName}}
+                                    {{userdata.lastName}}</span><br>
+                                <span class="font-bold">Age : </span> <span>{{userdata.age}}</span> <span
+                                    class="font-bold pl-6"> Gender : </span> <span> </span>{{userdata.gender}}</span>
+                                <br>
+                                <span class="font-bold">Email address : </span> <span>{{userdata.email}}</span>
+                                <br>
+                                <span class="font-bold">Phone number : </span> <span>{{userdata.phone}}</span>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rounded-xl bg-green-100 w-2/3 item-center mx-auto my-20 py-10 text-xl">
+                    <p class="text-2xl text-center font-bold pb-10">Edit Your Profile</p>
+                    <button v-show="!toggleEditingModeOn" @click="toggleEditingMode"
+                                class="mx-9 px-8 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 w-auto">Edit your profile</button>
+                    <div v-show="toggleEditingModeOn">
+                        <div class="flex flex-wrap px-10 py-2">
+                            <label class="px-2 py-2 w-1/5 font-bold" for="firstName">First Name</label>
+                            <input class="px-4 bg-green-200 rounded py-2 w-4/5" type="text" id="firstName"
+                                v-model="holding.hodingfirstName">
+                            <span class="px-2 py-1 font-light text-red-600"
+                                v-show="errorNoti.emptyfirstName.showmessage">{{errorNoti.emptyfirstName.message}}</span>
+                        </div>
+                        <div class="flex flex-wrap px-10 py-2">
+                            <label class="px-2 py-2 w-1/5 font-bold" for="lastName">Last Name</label>
+                            <input class="px-4 bg-green-200 rounded py-2 w-4/5" type="text" id="lastName"
+                                v-model="holding.hodinglastName">
+                            <span class="px-2 py-1 font-light text-red-600"
+                                v-show="errorNoti.emptylastName.showmessage">{{errorNoti.emptylastName.message}}</span>
+                        </div>
+                        <div class="flex flex-wrap px-10 py-2">
+                            <label class="px-2 py-2 w-1/5 font-bold" for="age">Age</label>
+                            <input class="px-4 bg-green-200 rounded py-2 w-4/5" type="text" id="age"
+                                v-model="holding.hodingage">
+                            <span class="px-2 py-1 font-light text-red-600"
+                                v-show="errorNoti.emptyage.showmessage">{{errorNoti.emptyage.message}}</span>
+                        </div>
+                        <div class="flex flex-wrap px-10 py-2">
+                            <label class="px-2 py-2 w-1/5 font-bold" for="gender">Gender</label>
+                            <select id="gender" v-model="holding.hodinggender"
+                                class="px-4 bg-green-200 rounded py-2 w-4/5">
+                                <option v-for="gender in availableGenderList" :value="gender.genderID"
+                                    class="px-4 bg-green-100 rounded py-2 w-4/5">
+                                    {{gender.ganderName}}
+                                </option>
+                            </select>
+                            <span class="px-2 py-1 font-light text-red-600"
+                                v-show="errorNoti.emptygender.showmessage">{{errorNoti.emptygender.message}}</span>
+                        </div>
+                        <div class="flex flex-wrap px-10 py-2">
+                            <label class="px-2 py-2 w-1/5 font-bold" for="phone-Number">Phone number</label>
+                            <input class="px-4 bg-green-200 rounded py-2 w-4/5" type="text" id="phone-Number"
+                                v-model="holding.hodingphone">
+                            <span class="px-2 py-1 font-light text-red-600"
+                                v-show="errorNoti.emptyphone.showmessage">{{errorNoti.emptyphone.message}}</span>
+                        </div>
+                        <div class="flex flex-wrap px-10 py-2">
+                            <label class="px-2 py-2 w-1/5 font-bold" for="email-Addr">Email Address</label>
+                            <input class="px-4 bg-green-200 rounded py-2 w-4/5" type="text" id="email-Addr"
+                                v-model="holding.hodingemail">
+                            <span class="px-2 py-1 font-light text-red-600"
+                                v-show="errorNoti.emptyemail.showmessage">{{errorNoti.emptyemail.message}}</span>
+                        </div>
+
+                        <div class="flex flex-wrap px-10 py-2">
+                            <label class="px-2 py-2 w-1/5 font-bold" for="position-In-Place">Your position</label>
+                            <input class="px-4 bg-green-200 rounded py-2 w-4/5" type="text" id="position-In-Place"
+                                v-model="holding.hodingpositioninplace">
+                        </div>
+                        <div class="flex flex-wrap px-10 py-2">
+                            <label class="px-2 py-2 w-1/5 font-bold" for="general-info">Your general information in
+                                brief</label>
+                            <input class="px-4 bg-green-200 rounded py-2 w-4/5" type="text" id="general-info"
+                                v-model="holding.hodingusergeneralinfo">
+                        </div>
+
+                        <div class="px-2 py-2 flex flex-wrap">
+                            <input type="submit" value="Submit" @click="checkEditForm"
+                                class="mx-9 px-8 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 w-1/4">
+                            <button @click="clearAllHolding"
+                                class="mx-9 px-8 py-2 text-red-900 bg-red-100 rounded-lg hover:bg-red-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 w-1/4">Clear
+                                All holding.</button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="tail" class="bg-green-100">
+                    <div class="flex flex-col text-center py-5">
+                        <p class="text-green-900 text-xl">By 62130500032 {{userdata.firstName}} {{userdata.lastName}}
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- my main.js -->
+    <script src="./main.js"></script>
+</body>
+
+</html>
